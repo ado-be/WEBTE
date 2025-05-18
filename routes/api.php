@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ScriptController;
+use App\Http\Controllers\Admin\UserActivityController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -59,11 +63,15 @@ Route::middleware('auth:sanctum')->post('/token/refresh', function (Request $req
 // Chránené API routes pre aktivity používateľov
 Route::middleware('auth:sanctum')->group(function () {
     // Zobrazenie aktivít (dostupné pre všetkých prihlásených používateľov)
-    Route::get('/user-activities', [\App\Http\Controllers\API\UserActivityController::class, 'index']);
+    Route::get('/user-activities', [UserActivityController::class, 'index']);
 
     // Admin API routes (vyžadujú admin práva)
     Route::middleware([\App\Http\Middleware\IsAdmin::class])->group(function () {
-        Route::get('/user-activities/export', [\App\Http\Controllers\API\UserActivityController::class, 'export']);
-        Route::post('/user-activities/clear', [\App\Http\Controllers\API\UserActivityController::class, 'clear']);
+        Route::get('/user-activities/export', [UserActivityController::class, 'export']);
+        Route::post('/user-activities/clear', [UserActivityController::class, 'clear']);
     });
 });
+
+///////////////////ROUTES PRE SKRIPTY 10
+Route::post('/convert-pdf', [ScriptController::class, 'convertPdf']);
+Route::post('/images-to-pdf', [ScriptController::class, 'imagesToPdf']);
