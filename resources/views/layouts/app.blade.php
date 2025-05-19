@@ -18,6 +18,15 @@
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
     @include('layouts.navigation')
 
+
+    <!-- Language Switcher -->
+    <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8 flex justify-end">
+        <div class="language-switcher">
+            <a href="{{ route('lang.switch', ['lang' => 'sk']) }}" class="{{ app()->getLocale() == 'sk' ? 'font-bold text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">SK</a>
+            <span class="mx-1 text-gray-400">|</span>
+            <a href="{{ route('lang.switch', ['lang' => 'en']) }}" class="{{ app()->getLocale() == 'en' ? 'font-bold text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">EN</a>
+        </div>
+    </div>
     <!-- Page Heading -->
     @isset($header)
         <header class="bg-white dark:bg-gray-800 shadow">
