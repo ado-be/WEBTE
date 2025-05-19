@@ -73,5 +73,23 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 ///////////////////ROUTES PRE SKRIPTY 10
-Route::post('/convert-pdf', [ScriptController::class, 'convertPdf']);
+//images to pdf route
 Route::post('/images-to-pdf', [ScriptController::class, 'imagesToPdf']);
+//extract page route
+Route::post('/extract-page', [ScriptController::class, 'extractPage']);
+//extract text from pdf route
+Route::post('/extract-text', [ScriptController::class, 'extractText']);
+//merge pdfs route
+Route::post('/merge-pdfs', [ScriptController::class, 'mergePdfs']);
+//pdf to images route
+Route::post('/pdf-to-images', [ScriptController::class, 'pdfToImages']);
+//pdf to pptx route
+Route::post('/pdf-to-pptx', [ScriptController::class, 'pdfToPptx']);
+//pdf to word route
+Route::post('/pdf-to-word', [ScriptController::class, 'pdfToWord']);
+//protect pdf route
+Route::post('/protect-pdf', [ScriptController::class, 'protectPdf']);
+//remove page route
+Route::post('/remove-page', [ScriptController::class, 'removePage']);
+//split route
+Route::post('/split-pdf', [ScriptController::class, 'splitPdf']);
