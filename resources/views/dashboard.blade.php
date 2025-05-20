@@ -1,7 +1,5 @@
 <x-app-layout>
 
-
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
@@ -22,23 +20,23 @@
             @if(Auth::check() && Auth::user()->is_admin)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-bold mb-4">🛠 Admin nástroje</h3>
+                        <h3 class="text-lg font-bold mb-4">🛠 {{ __('Admin Tools') }}</h3>
                         <ul class="list-disc ml-6 space-y-2">
                             <li>
                                 <a href="{{ route('admin.user-activities.index') }}" class="text-blue-500 hover:underline">
-                                    🧾 Zobraziť históriu aktivít používateľov
+                                    🧾 {{ __('View user activity history') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.user-activities.export') }}" class="text-blue-500 hover:underline">
-                                    📤 Exportovať aktivity do CSV
+                                    📤 {{ __('Export activities to CSV') }}
                                 </a>
                             </li>
                             <li>
-                                <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('Naozaj chceš vymazať všetku históriu?');" class="inline">
+                                <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete all activity history?') }}');" class="inline">
                                     @csrf
                                     <button type="submit" class="text-red-500 hover:underline bg-transparent border-none p-0">
-                                        🧹 Vymazať všetky aktivity
+                                        🧹 {{ __('Clear all activities') }}
                                     </button>
                                 </form>
                             </li>
@@ -48,8 +46,8 @@
             @else
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-bold mb-4">📢 Informácia</h3>
-                        <p>Na zobrazenie admin nástrojov potrebujete admin práva.</p>
+                        <h3 class="text-lg font-bold mb-4">📢 {{ __('Information') }}</h3>
+                        <p>{{ __('You need admin privileges to view admin tools.') }}</p>
                     </div>
                 </div>
             @endif
@@ -57,5 +55,4 @@
         </div>
     </div>
 
-  
 </x-app-layout>
