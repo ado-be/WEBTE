@@ -23,7 +23,7 @@
 
             const formData = new FormData(e.target);
 
-            const res = await fetch('/upload-merge-pdfs', {
+            const res = await fetch('/api/merge-pdfs', {
                 method: 'POST',
                 body: formData
             });

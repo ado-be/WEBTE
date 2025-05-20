@@ -6,6 +6,30 @@ use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\TokenController; // Pridaný import
 use App\Http\Controllers\UploadPdfController;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+
+//ulozenie obrazkov
+Route::post('/upload-images', function(Request $request) {
+    $files = $request->file('images');
+    $folderName = $request->input('target_folder');
+    $basePath = storage_path("obrazky/$folderName");
+
+    if (!File::exists($basePath)) {
+        File::makeDirectory($basePath, 0755, true);
+    }
+
+    foreach ($files as $file) {
+        $file->move($basePath, $file->getClientOriginalName());
+    }
+
+    return response()->json([
+        'success' => true,
+        'folder' => "storage/obrazky/$folderName"
+    ]);
+});
+
 Route::post('/upload-images-to-pdf', [UploadPdfController::class, 'generateFromImages'])->middleware('auth');
 
 Route::view('/merge-pdfs', 'merge-pdfs')->middleware('auth');

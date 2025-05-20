@@ -20,28 +20,68 @@
     <script>
         document.getElementById('uploadForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const form = e.target;
             const formData = new FormData(form);
+            const status = document.getElementById('status');
 
-            const res = await fetch('/upload-images-to-pdf', {
-                method: 'POST',
-                body: formData
-            });
+            try {
+                const timestamp = Date.now();
+                const folderName = `upload_${timestamp}`;
+                formData.append('target_folder', folderName);
+                // 1. Upload obrázkov
+                const uploadRes = await fetch('/upload-images', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
 
-            if (res.ok) {
-                const blob = await res.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = "vysledok.pdf";
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                document.getElementById('status').textContent = "✅ PDF úspešne vygenerované.";
-            } else {
-                document.getElementById('status').textContent = "❌ Chyba pri generovaní PDF.";
+                const uploadJson = await uploadRes.json();
+
+                if (!uploadJson.success) {
+                    status.textContent = "❌ Nepodarilo sa nahrať obrázky.";
+                    return;
+                }
+
+                // 2. Zavolaj API na generovanie PDF
+                const imageFolder = uploadJson.folder;
+
+                const pdfRes = await fetch('/api/images-to-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image_folder: imageFolder,
+                        output_pdf: 'storage/app/public/ImageToPdfVystup.pdf'
+                    })
+                });
+
+                const pdfJson = await pdfRes.json();
+
+                if (pdfJson.success) {
+                    const rawPath = pdfJson.output[0].split(': ')[1]; // extrahuje cestu
+                    const filename = rawPath.split('/').pop();
+                    const url = `/storage/${filename}`; // ak máš storage:link
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+
+                    status.textContent = "✅ PDF úspešne vygenerované a stiahnuté.";
+                } else {
+                    status.textContent = "❌ Chyba pri generovaní PDF.";
+                }
+
+            } catch (err) {
+                console.error(err);
+                status.textContent = "❌ Neočakávaná chyba pri komunikácii s API.";
             }
         });
     </script>
+
+
 </x-app-layout>

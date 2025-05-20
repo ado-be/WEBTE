@@ -18,7 +18,8 @@ class UploadPdfController extends Controller
 
             // Unikátne ID pre priečinok a výstup
             $folderId = \Str::uuid()->toString();
-            $uploadDir = public_path("uploads/$folderId");
+            //$uploadDir = public_path("uploads/$folderId");
+            $uploadDir = "uploads/$folderId";
             $outputPdf = public_path("uploads/{$folderId}_output.pdf");
 
             // Vytvor adresár ak neexistuje
