@@ -68,6 +68,12 @@
                     Zlúčiť PDF
                 </button>
             </a>
+
+            <a href="{{ url('/remove_page') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Odstrániť stranu
+                </button>
+            </a>
         </div>
 
     </div>

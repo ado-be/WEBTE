@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
+Route::get('/remove_page', [UploadPdfController::class, 'showRemovePageForm']);
+Route::post('/remove_page', [UploadPdfController::class, 'removePage']);
+
+
 //ulozenie obrazkov
 Route::post('/upload-images', function(Request $request) {
     $files = $request->file('images');
