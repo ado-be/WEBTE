@@ -37,7 +37,6 @@
   "API Test": "API Test",
   "API Testing": "Testovanie API",
   "Create a token in the": "Vytvorte token v sekcii",
-
   "Copy the created token and paste it here (including \"Bearer \" before the token)": "Skopírujte vytvorený token a vložte ho sem (vrátane \"Bearer \" pred tokenom)",
   "Click the buttons below to test the API": "Kliknite na tlačidlá nižšie na testovanie API",
   "Your API Token": "Váš API Token",
@@ -50,7 +49,6 @@
   "Loading...": "Načítavam...",
   "Error": "Chyba",
   "User Activity History": "História aktivít používateľov",
-
   "Clear history": "Vymazať históriu",
   "User": "Používateľ",
   "Action": "Akcia",
@@ -60,27 +58,25 @@
   "Time": "Čas",
   "Unknown": "Neznámy",
   "No activities found": "Žiadne aktivity nenájdené",
-
   "Profile Information": "Informácie o profile",
   "Update your account's profile information and email address.": "Aktualizujte informácie o svojom profile a e-mailovej adrese.",
-
   "Your email address is unverified.": "Vaša e-mailová adresa nie je overená.",
   "Click here to re-send the verification email.": "Kliknite sem na opätovné odoslanie overovacieho e-mailu.",
   "A new verification link has been sent to your email address.": "Bol odoslaný nový overovací odkaz na vašu e-mailovú adresu.",
   "Save": "Uložiť",
-
   "Update Password": "Zmena hesla",
   "Ensure your account is using a long, random password to stay secure.": "Uistite sa, že vaše konto používa dlhé a náhodné heslo pre väčšiu bezpečnosť.",
   "Current Password": "Aktuálne heslo",
   "New Password": "Nové heslo",
   "Confirm Password": "Potvrdenie hesla",
-
   "Saved.": "Uložené.",
   "Delete Account": "Zmazať účet",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Po zmazaní účtu budú všetky jeho dáta a zdroje natrvalo odstránené. Pred zmazaním si stiahnite všetky údaje, ktoré si chcete ponechať.",
   "Are you sure you want to delete your account?": "Naozaj chcete zmazať svoj účet?",
   "Please enter your password to confirm you would like to permanently delete your account.": "Zadajte svoje heslo pre potvrdenie, že chcete natrvalo zmazať svoj účet.",
    "Cancel": "Zrušiť"
+
+
 
 
 }

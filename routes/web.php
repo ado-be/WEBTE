@@ -7,9 +7,9 @@ use App\Http\Controllers\TokenController;
 use App\Http\Middleware\Localization;
 use App\Http\Controllers\LocalizationController;
 
-
+// Jazyková zmena – nastaví lokalizáciu na základe zvoleného jazyka (napr. /localization/sk
 Route::get('/localization/{locale}', LocalizationController::class)->name('localization');
-
+// Skupina rout s aplikovaným middleware na nastavenie lokalizácie
 Route::middleware(Localization::class)->group(function () {
     Route::view('/', 'welcome');
 

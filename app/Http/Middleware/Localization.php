@@ -17,6 +17,8 @@ class Localization
     public function handle(Request $request, Closure $next): Response
     {
 
+        // Nastaví jazyk aplikácie na hodnotu zo session,
+        // alebo použije predvolený jazyk z config('app.locale') ak session hodnota neexistuje
        app()->setLocale(session('localization', config('app.locale')));
 
 
