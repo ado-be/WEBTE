@@ -14,6 +14,20 @@ Route::get('/remove_page', [UploadPdfController::class, 'showRemovePageForm']);
 Route::post('/remove_page', [UploadPdfController::class, 'removePage']);
 Route::get('/protect_pdf', [UploadPdfController::class, 'showProtectPdfForm']);
 Route::post('/protect_pdf', [UploadPdfController::class, 'protectPdf']);
+Route::get('/pdf_to_word', [UploadPdfController::class, 'showPdfToWordForm']);
+Route::post('/pdf_to_word', [UploadPdfController::class, 'pdfToWord']);
+Route::get('/pdf_to_pptx', [UploadPdfController::class, 'showPdfToPptxForm']);
+Route::post('/pdf_to_pptx', [UploadPdfController::class, 'pdfToPptx']);
+Route::get('/split_pdf', [UploadPdfController::class, 'showSplitPdfForm']);
+Route::post('/split_pdf', [UploadPdfController::class, 'splitPdf']);
+Route::get('/extract_text', [UploadPdfController::class, 'showExtractTextForm']);
+Route::post('/extract_text', [UploadPdfController::class, 'extractTextFromPdf']);
+Route::get('/pdf_to_images', [UploadPdfController::class, 'showPdfToImagesForm']);
+Route::post('/pdf_to_images', [UploadPdfController::class, 'pdfToImages']);
+Route::get('/extract_page', [UploadPdfController::class, 'showExtractPageForm']);
+Route::post('/extract_page', [UploadPdfController::class, 'extractPage']);
+Route::get('/merge_pdfs', [UploadPdfController::class, 'showMergePdfsForm']);
+Route::post('/merge_pdfs', [UploadPdfController::class, 'mergePdfs']);
 
 
 //ulozenie obrazkov

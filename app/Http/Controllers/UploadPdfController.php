@@ -64,58 +64,72 @@ class UploadPdfController extends Controller
     {
         try {
             $request->validate([
-                'pdfs.*' => 'required|mimes:pdf',
+                'pdf_file1' => 'required|mimes:pdf',
+                'pdf_file2' => 'required|mimes:pdf',
             ]);
 
-            // Jednoduchý a správny názov priečinka
-            $folderName = \Str::uuid()->toString();
-            $folderPath = public_path("uploads_merge/$folderName");
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputPdf = "$uploadDir/zluceny.pdf";
 
-            // Vytvor priečinok pre PDF
-            mkdir($folderPath, 0755, true);
-
-            $pdfPaths = [];
-
-            // Presuň nahrané PDF súbory
-            foreach ($request->file('pdfs') as $pdf) {
-                $filename = $pdf->getClientOriginalName();
-                $fullPath = $folderPath . '/' . $filename;
-                $pdf->move($folderPath, $filename);
-                $pdfPaths[] = $fullPath;
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
             }
 
-            // Výstupný PDF súbor
-            $outputPdf = $folderPath . '/merged.pdf';
+            $pdf1 = $request->file('pdf_file1');
+            $pdf2 = $request->file('pdf_file2');
 
-            // Volanie API cez JSON
-            $response = \Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])->post(url('/api/merge-pdfs'), [
-                'pdf_paths' => $pdfPaths,
-                'output_pdf' => $outputPdf,
+            $inputPath1 = "$uploadDir/" . $pdf1->getClientOriginalName();
+            $inputPath2 = "$uploadDir/" . $pdf2->getClientOriginalName();
+
+            $pdf1->move($uploadDir, basename($inputPath1));
+            $pdf2->move($uploadDir, basename($inputPath2));
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/merge_pdf.py'),
+                $inputPath1,
+                $inputPath2,
+                $outputPdf
             ]);
 
-            if (!$response->ok() || !$response->json('success')) {
-                \Log::error('API merge-pdfs failed', ['response' => $response->body()]);
-                return response('Chyba pri merge PDF (API).', 500);
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri zlučovaní PDF.');
+                \Log::error('merge_pdf.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
             }
 
             if (!file_exists($outputPdf)) {
-                \Log::error('Výstupné PDF nebolo nájdené.', ['path' => $outputPdf]);
-                return response('PDF sa nevytvorilo.', 500);
+                session()->flash('error', 'Výstupný PDF súbor sa nevytvoril.');
+                return back();
             }
 
-            return response()->download($outputPdf)->deleteFileAfterSend(true);
+            return response()->download($outputPdf, 'zluceny.pdf')->deleteFileAfterSend(true);
 
         } catch (\Exception $e) {
-            \Log::error('Merge PDFs výnimka', [
+            session()->flash('error', $e->getMessage());
+            \Log::error('mergePdfs výnimka', [
                 'msg' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return response('Chyba servera.', 500);
+            return back();
         }
     }
+    public function showMergePdfsForm()
+    {
+        return view('merge_pdfs');
+    }
+
 
     public function showRemovePageForm()
     {
@@ -249,6 +263,421 @@ class UploadPdfController extends Controller
     public function showProtectPdfForm()
     {
         return view('protect_pdf');
+    }
+
+    public function pdfToWord(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputDocx = "$uploadDir/converted.docx";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/pdf_to_word.py'),
+                $inputPath,
+                $outputDocx
+            ]);
+
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri konverzii PDF na Word.');
+                \Log::error('pdf_to_word.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($outputDocx)) {
+                session()->flash('error', 'Výstupný DOCX súbor sa nevytvoril.');
+                return back();
+            }
+
+            return response()->download($outputDocx, 'dokument.docx')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('pdfToWord výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showPdfToWordForm()
+    {
+        return view('pdf_to_word');
+    }
+
+    public function pdfToPptx(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputPptx = "$uploadDir/prezentacia.pptx";
+            $tempImageDir = "$uploadDir/images";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/pdf_to_pptx.py'),
+                $inputPath,
+                $outputPptx,
+                $tempImageDir
+            ]);
+
+            $process->setTimeout(90);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri konverzii PDF na PPTX.');
+                \Log::error('pdf_to_pptx.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($outputPptx)) {
+                session()->flash('error', 'Výstupný PPTX súbor sa nevytvoril.');
+                return back();
+            }
+
+            return response()->download($outputPptx, 'prezentacia.pptx')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('pdfToPptx výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showPdfToPptxForm()
+    {
+        return view('pdf_to_pptx');
+    }
+
+    public function splitPdf(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+                'split_at' => 'required|integer|min:1',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $output1 = "$uploadDir/split_part1.pdf";
+            $output2 = "$uploadDir/split_part2.pdf";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/split_pdf.py'),
+                $inputPath,
+                $request->input('split_at'),
+                $output1,
+                $output2
+            ]);
+
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri rozdeľovaní PDF.');
+                \Log::error('split_pdf.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($output1) || !file_exists($output2)) {
+                session()->flash('error', 'Nevytvorili sa všetky výstupné PDF súbory.');
+                return back();
+            }
+
+            // Vytvor zip s oboma PDF
+            $zipPath = "$uploadDir/split_output.zip";
+            $zip = new \ZipArchive();
+            if ($zip->open($zipPath, \ZipArchive::CREATE) === true) {
+                $zip->addFile($output1, 'cast1.pdf');
+                $zip->addFile($output2, 'cast2.pdf');
+                $zip->close();
+            } else {
+                session()->flash('error', 'Nepodarilo sa vytvoriť ZIP archív.');
+                return back();
+            }
+
+            return response()->download($zipPath, 'rozdeleny.pdf.zip')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('splitPdf výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showSplitPdfForm()
+    {
+        return view('split_pdf');
+    }
+    public function extractTextFromPdf(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputText = "$uploadDir/extracted.txt";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/extract_text_from_pdf.py'),
+                $inputPath,
+                $outputText
+            ]);
+
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri extrakcii textu z PDF.');
+                \Log::error('extract_text_from_pdf.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($outputText)) {
+                session()->flash('error', 'Výstupný textový súbor sa nevytvoril.');
+                return back();
+            }
+
+            return response()->download($outputText, 'extrahovany_text.txt')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('extractTextFromPdf výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showExtractTextForm()
+    {
+        return view('extract_text');
+    }
+
+    public function pdfToImages(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $imageDir = "$uploadDir/images";
+            $zipPath = "$uploadDir/pdf_obrazky.zip";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/pdf_to_images.py'),
+                $inputPath,
+                $imageDir
+            ]);
+
+            $process->setTimeout(90);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri konverzii PDF na obrázky.');
+                \Log::error('pdf_to_images.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($imageDir) || count(glob("$imageDir/*.png")) === 0) {
+                session()->flash('error', 'Obrázky sa nevytvorili.');
+                return back();
+            }
+
+            // Vytvor ZIP archív z obrázkov
+            $zip = new \ZipArchive();
+            if ($zip->open($zipPath, \ZipArchive::CREATE) === true) {
+                foreach (glob("$imageDir/*.png") as $file) {
+                    $zip->addFile($file, basename($file));
+                }
+                $zip->close();
+            } else {
+                session()->flash('error', 'Nepodarilo sa vytvoriť ZIP archív.');
+                return back();
+            }
+
+            return response()->download($zipPath, 'stranky_obrazky.zip')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('pdfToImages výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showPdfToImagesForm()
+    {
+        return view('pdf_to_images');
+    }
+    public function extractPage(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+                'page_number' => 'required|integer|min:1',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputPdf = "$uploadDir/extracted_page.pdf";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/extract_page.py'),
+                $inputPath,
+                $request->input('page_number'),
+                $outputPdf
+            ]);
+
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri extrakcii strany z PDF.');
+                \Log::error('extract_page.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($outputPdf)) {
+                session()->flash('error', 'Výstupný PDF súbor sa nevytvoril.');
+                return back();
+            }
+
+            return response()->download($outputPdf, 'extrahovana_strana.pdf')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('extractPage výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+    public function showExtractPageForm()
+    {
+        return view('extract_page');
     }
 
 

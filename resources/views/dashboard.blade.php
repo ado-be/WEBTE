@@ -63,7 +63,7 @@
                 </button>
             </a>
 
-            <a href="{{ url('/merge-pdfs') }}" class="ml-4">
+            <a href="{{ url('/merge_pdfs') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
                     Zlúčiť PDF
                 </button>
@@ -78,6 +78,42 @@
             <a href="{{ url('/protect_pdf') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
                     Zaheslovať PDF
+                </button>
+            </a>
+
+            <a href="{{ url('/pdf_to_word') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Konvertovať do WORD
+                </button>
+            </a>
+
+            <a href="{{ url('/pdf_to_pptx') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Konvertovať do PowerPoint
+                </button>
+            </a>
+
+            <a href="{{ url('/split_pdf') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Rozdeľ PDF
+                </button>
+            </a>
+
+            <a href="{{ url('/extract_page') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Vytiahni stranu
+                </button>
+            </a>
+
+            <a href="{{ url('/extract_text') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Extrahuj text
+                </button>
+            </a>
+
+            <a href="{{ url('/pdf_to_images') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Extrahuj PDF do fotiek
                 </button>
             </a>
         </div>
