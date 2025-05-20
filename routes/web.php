@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\TokenController; // Pridaný import
+use App\Http\Controllers\UploadPdfController;
+
+Route::post('/upload-images-to-pdf', [UploadPdfController::class, 'generateFromImages'])->middleware('auth');
+
+Route::view('/merge-pdfs', 'merge-pdfs')->middleware('auth');
+Route::post('/upload-merge-pdfs', [UploadPdfController::class, 'mergePdfs'])->middleware('auth');
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,5 +47,7 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->prefix('admin'
 Route::middleware('auth')->get('/api-test', function () {
     return view('api-test');
 })->name('api.test');
+
+Route::view('/images-to-pdf', 'images-to-pdf')->middleware('auth');
 
 require __DIR__.'/auth.php';

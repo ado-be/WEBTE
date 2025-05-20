@@ -55,7 +55,22 @@
             @endif
 
         </div>
+
+        <div class="mt-6">
+            <a href="{{ url('/images-to-pdf') }}">
+                <button class="bg-indigo-500 text-black px-4 py-2 rounded hover:bg-indigo-600">
+                    Images to PDF
+                </button>
+            </a>
+
+            <a href="{{ url('/merge-pdfs') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Zlúčiť PDF
+                </button>
+            </a>
+        </div>
+
     </div>
 
-  
+
 </x-app-layout>
