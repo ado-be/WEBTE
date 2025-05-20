@@ -18,7 +18,7 @@
 
                     <!-- Odkaz na správu tokenov -->
                     <x-nav-link :href="route('tokens.index')" :active="request()->routeIs('tokens.index')">
-                        {{ __('API Tokeny') }}
+                        {{ __('API Tokens') }}
                     </x-nav-link>
 
                     <!-- Odkaz na testovanie API -->
@@ -60,6 +60,22 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                <div class="flex space-x-2 items-center">
+                    <a href="{{ route('localization', 'sk') }}" title="Slovenčina">
+                        <img src="{{ asset('images/flags/sk.png') }}"
+                             alt="Slovak"
+                             class="w-6 h-4 rounded shadow {{ app()->getLocale() === 'sk' ? 'opacity-100' : 'opacity-50' }} hover:opacity-75 transition">
+                    </a>
+
+                    <a href="{{ route('localization', 'en') }}" title="English">
+                        <img src="{{ asset('images/flags/en.png') }}"
+                             alt="English"
+                             class="w-6 h-4 rounded shadow {{ app()->getLocale() === 'en' ? 'opacity-100' : 'opacity-50' }} hover:opacity-75 transition">
+                    </a>
+                </div>
+
+
+
             </div>
 
             <!-- Hamburger -->
@@ -110,10 +126,27 @@
 
                     <x-responsive-nav-link :href="route('logout')"
                                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                    this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="px-4 py-2 mt-3 border-t border-gray-200 dark:border-gray-600">
+                <div class="flex space-x-3 items-center">
+                    <a href="{{ route('localization', 'sk') }}" title="Slovenčina">
+                        <img src="{{ asset('images/flags/sk.png') }}"
+                             alt="Slovak"
+                             class="w-6 h-4 rounded shadow {{ app()->getLocale() === 'sk' ? 'opacity-100 ring-2 ring-blue-500' : 'opacity-60' }} hover:opacity-90 transition">
+                    </a>
+
+                    <a href="{{ route('localization', 'en') }}" title="English">
+                        <img src="{{ asset('images/flags/en.png') }}"
+                             alt="English"
+                             class="w-6 h-4 rounded shadow {{ app()->getLocale() === 'en' ? 'opacity-100 ring-2 ring-blue-500' : 'opacity-60' }} hover:opacity-90 transition">
+                    </a>
+                </div>
             </div>
         </div>
     </div>

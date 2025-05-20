@@ -22,23 +22,25 @@
             @if(Auth::check() && Auth::user()->is_admin)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-bold mb-4">🛠 Admin nástroje</h3>
+
+                        <h3 class="text-lg font-bold mb-4">🛠 {{ __('Admin Tools') }}</h3>
                         <ul class="list-disc ml-6 space-y-2">
                             <li>
                                 <a href="{{ route('admin.user-activities.index') }}" class="text-blue-500 hover:underline">
-                                    🧾 Zobraziť históriu aktivít používateľov
+                                    🧾 {{ __('View user activity history') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.user-activities.export') }}" class="text-blue-500 hover:underline">
-                                    📤 Exportovať aktivity do CSV
+                                    📤 {{ __('Export activities to CSV') }}
                                 </a>
                             </li>
                             <li>
-                                <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('Naozaj chceš vymazať všetku históriu?');" class="inline">
+                                <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete all activity history?') }}');" class="inline">
+{{--                                <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('Naozaj chceš vymazať všetku históriu?');" class="inline">--}}
                                     @csrf
                                     <button type="submit" class="text-red-500 hover:underline bg-transparent border-none p-0">
-                                        🧹 Vymazať všetky aktivity
+                                        🧹 {{ __('Clear all activities') }}
                                     </button>
                                 </form>
                             </li>
@@ -48,75 +50,136 @@
             @else
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-bold mb-4">📢 Informácia</h3>
-                        <p>Na zobrazenie admin nástrojov potrebujete admin práva.</p>
+                        <h3 class="text-lg font-bold mb-4">📢 {{ __('Information') }}</h3>
+                        <p>{{ __('You need admin privileges to view admin tools.') }}</p>
                     </div>
                 </div>
             @endif
 
         </div>
-
         <div class="mt-6">
             <a href="{{ url('/images-to-pdf') }}">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Images to PDF
+                    {{ __('Images to PDF') }}
                 </button>
             </a>
 
             <a href="{{ url('/merge_pdfs') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Zlúčiť PDF
+                    {{ __('Merge PDF') }}
                 </button>
             </a>
 
             <a href="{{ url('/remove_page') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Odstrániť stranu
+                    {{ __('Remove Page') }}
                 </button>
             </a>
 
             <a href="{{ url('/protect_pdf') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Zaheslovať PDF
+                    {{ __('Protect PDF') }}
                 </button>
             </a>
 
             <a href="{{ url('/pdf_to_word') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Konvertovať do WORD
+                    {{ __('Convert to WORD') }}
                 </button>
             </a>
 
             <a href="{{ url('/pdf_to_pptx') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Konvertovať do PowerPoint
+                    {{ __('Convert to PowerPoint') }}
                 </button>
             </a>
 
             <a href="{{ url('/split_pdf') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Rozdeľ PDF
+                    {{ __('Split PDF') }}
                 </button>
             </a>
 
             <a href="{{ url('/extract_page') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Vytiahni stranu
+                    {{ __('Extract Page') }}
                 </button>
             </a>
 
             <a href="{{ url('/extract_text') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Extrahuj text
+                    {{ __('Extract Text') }}
                 </button>
             </a>
 
             <a href="{{ url('/pdf_to_images') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    Extrahuj PDF do fotiek
+                    {{ __('Convert PDF to Images') }}
                 </button>
             </a>
         </div>
+
+        {{--        <div class="mt-6">--}}
+{{--            <a href="{{ url('/images-to-pdf') }}">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Images to PDF--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/merge_pdfs') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Zlúčiť PDF--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/remove_page') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Odstrániť stranu--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/protect_pdf') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Zaheslovať PDF--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/pdf_to_word') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Konvertovať do WORD--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/pdf_to_pptx') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Konvertovať do PowerPoint--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/split_pdf') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Rozdeľ PDF--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/extract_page') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Vytiahni stranu--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/extract_text') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Extrahuj text--}}
+{{--                </button>--}}
+{{--            </a>--}}
+
+{{--            <a href="{{ url('/pdf_to_images') }}" class="ml-4">--}}
+{{--                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">--}}
+{{--                    Extrahuj PDF do fotiek--}}
+{{--                </button>--}}
+{{--            </a>--}}
+{{--        </div>--}}
 
     </div>
 

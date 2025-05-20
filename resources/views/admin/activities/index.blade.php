@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('História aktivít používateľov') }}
+            {{ __('User Activity History') }}
         </h2>
     </x-slot>
 
@@ -16,10 +16,10 @@
                     @endif
 
                     <div class="mb-4">
-                        <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('Naozaj chceš vymazať celú históriu?');">
+                        <form action="{{ route('admin.user-activities.clear') }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete all activity history?') }}');">
                             @csrf
                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                🧹 Vymazať históriu
+                                🧹 {{ __('Clear history') }}
                             </button>
                         </form>
                     </div>
@@ -28,18 +28,18 @@
                         <table class="min-w-full bg-white dark:bg-gray-700">
                             <thead>
                             <tr>
-                                <th class="py-2 px-4 border-b">Používateľ</th>
-                                <th class="py-2 px-4 border-b">Akcia</th>
-                                <th class="py-2 px-4 border-b">Zdroj</th>
-                                <th class="py-2 px-4 border-b">IP</th>
-                                <th class="py-2 px-4 border-b">Lokácia</th>
-                                <th class="py-2 px-4 border-b">Čas</th>
+                                <th class="py-2 px-4 border-b">{{ __('User') }}</th>
+                                <th class="py-2 px-4 border-b">{{ __('Action') }}</th>
+                                <th class="py-2 px-4 border-b">{{ __('Source') }}</th>
+                                <th class="py-2 px-4 border-b">{{ __('IP') }}</th>
+                                <th class="py-2 px-4 border-b">{{ __('Location') }}</th>
+                                <th class="py-2 px-4 border-b">{{ __('Time') }}</th>
                             </tr>
                             </thead>
                             <tbody>
                             @forelse($activities as $activity)
                                 <tr>
-                                    <td class="py-2 px-4 border-b">{{ $activity->user->email ?? 'Neznámy' }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $activity->user->email ?? __('Unknown') }}</td>
                                     <td class="py-2 px-4 border-b">{{ $activity->action }}</td>
                                     <td class="py-2 px-4 border-b">{{ strtoupper($activity->source) }}</td>
                                     <td class="py-2 px-4 border-b">{{ $activity->ip }}</td>
@@ -48,7 +48,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="py-2 px-4 border-b text-center">Žiadne aktivity nenájdené</td>
+                                    <td colspan="6" class="py-2 px-4 border-b text-center">{{ __('No activities found') }}</td>
                                 </tr>
                             @endforelse
                             </tbody>
