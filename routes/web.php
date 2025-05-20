@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 Route::get('/remove_page', [UploadPdfController::class, 'showRemovePageForm']);
 Route::post('/remove_page', [UploadPdfController::class, 'removePage']);
+Route::get('/protect_pdf', [UploadPdfController::class, 'showProtectPdfForm']);
+Route::post('/protect_pdf', [UploadPdfController::class, 'protectPdf']);
 
 
 //ulozenie obrazkov

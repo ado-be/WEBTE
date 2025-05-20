@@ -58,7 +58,7 @@
 
         <div class="mt-6">
             <a href="{{ url('/images-to-pdf') }}">
-                <button class="bg-indigo-500 text-black px-4 py-2 rounded hover:bg-indigo-600">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
                     Images to PDF
                 </button>
             </a>
@@ -72,6 +72,12 @@
             <a href="{{ url('/remove_page') }}" class="ml-4">
                 <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
                     Odstrániť stranu
+                </button>
+            </a>
+
+            <a href="{{ url('/protect_pdf') }}" class="ml-4">
+                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                    Zaheslovať PDF
                 </button>
             </a>
         </div>

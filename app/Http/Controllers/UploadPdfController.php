@@ -122,64 +122,7 @@ class UploadPdfController extends Controller
         return view('remove_page');
     }
 
-    public function handleRemovePage(Request $request)
-    {
-        try {
-            $request->validate([
-                'pdf_file' => 'required|mimes:pdf',
-                'page' => 'required|integer|min:0',
-            ]);
 
-            $uuid = \Str::uuid()->toString();
-            $uploadDir = public_path("uploads/$uuid");
-            mkdir($uploadDir, 0755, true);
-
-            $pdf = $request->file('pdf_file');
-            $originalPath = "$uploadDir/" . $pdf->getClientOriginalName();
-            $pdf->move($uploadDir, basename($originalPath));
-
-            $outputPath = "$uploadDir/removed.pdf";
-
-            // Cesta k python3 vo venv
-            $pythonPath = '/var/www/novy/venv/bin/python3'; // <- ak sa zmení, uprav
-
-            // Spustenie skriptu
-            $process = new \Symfony\Component\Process\Process([
-                $pythonPath,
-                base_path('scripts/remove_page.py'),
-                $originalPath,
-                $request->input('page'),
-                $outputPath
-            ]);
-
-            $process->setTimeout(60); // aby to neviselo večne
-            $process->run();
-
-            // Výpis priamo na stránku
-            if (!$process->isSuccessful()) {
-                return back()->with([
-                    'error_exit' => $process->getExitCode(),
-                    'error_stdout' => $process->getOutput(),
-                    'error_stderr' => $process->getErrorOutput()
-                ]);
-            }
-
-            if (!file_exists($outputPath)) {
-                return back()->with([
-                    'error_stderr' => 'Výstupný PDF súbor nebol vytvorený.',
-                    'error_exit' => 1
-                ]);
-            }
-
-            return response()->download($outputPath, 'upraveny.pdf')->deleteFileAfterSend(true);
-
-        } catch (\Exception $e) {
-            return back()->with([
-                'error_stderr' => $e->getMessage(),
-                'error_trace' => $e->getTraceAsString()
-            ]);
-        }
-    }
 
     public function removePage(Request $request)
     {
@@ -241,6 +184,72 @@ class UploadPdfController extends Controller
     }
 
 
+    public function protectPdf(Request $request)
+    {
+        try {
+            $request->validate([
+                'pdf_file' => 'required|mimes:pdf',
+                'password' => 'required|string|min:1',
+            ]);
+
+            $uuid = \Str::uuid()->toString();
+            $uploadDir = public_path("uploads/$uuid");
+            $outputPdf = "$uploadDir/protected.pdf";
+
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0775, true)) {
+                    session()->flash('error', 'Laravel nemôže vytvoriť priečinok pre upload.');
+                    return back();
+                }
+            }
+
+            $pdf = $request->file('pdf_file');
+            $originalName = $pdf->getClientOriginalName();
+            $inputPath = "$uploadDir/$originalName";
+            $pdf->move($uploadDir, $originalName);
+
+            $process = new \Symfony\Component\Process\Process([
+                '/var/www/novy/venv/bin/python3',
+                base_path('scripts/protect_pdf.py'),
+                $inputPath,
+                $outputPdf,
+                $request->input('password')
+            ]);
+
+            $process->setTimeout(60);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                session()->flash('error', 'Chyba pri šifrovaní PDF.');
+                \Log::error('protect_pdf.py error', [
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                    'exit' => $process->getExitCode()
+                ]);
+                return back();
+            }
+
+            if (!file_exists($outputPdf)) {
+                session()->flash('error', 'Výstupný súbor neexistuje.');
+                return back();
+            }
+
+            return response()->download($outputPdf, 'zabezpeceny.pdf')->deleteFileAfterSend(true);
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            \Log::error('protectPdf výnimka', [
+                'msg' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back();
+        }
+    }
+
+    public function showProtectPdfForm()
+    {
+        return view('protect_pdf');
+    }
 
 
 
