@@ -126,6 +126,11 @@
 </head>
 
 <body @if(config('l5-swagger.defaults.ui.display.dark_mode')) id="dark-mode" @endif>
+<div style="padding: 1rem; background-color: #ffffff; border-bottom: 1px solid #ddd;">
+    <a href="/dashboard" style="padding: 0.5rem 1rem; background-color: #2563eb; color: white; text-decoration: none; border-radius: 4px;">
+        ⬅️ Späť na nástenku
+    </a>
+</div>
 <div id="swagger-ui"></div>
 
 <script src="{{ l5_swagger_asset($documentation, 'swagger-ui-bundle.js') }}"></script>

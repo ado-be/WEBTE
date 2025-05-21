@@ -9,6 +9,17 @@ use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;     //kvoli generovaniu pdf z navodu
+
+Route::get('/navod', function () {
+    return view('navod');
+})->name('navod');
+
+Route::get('/navod-pdf', function () {
+    $manualHtml = view('manual')->render(); // používa priamo manual_pdf.blade.php
+    return Pdf::loadHTML($manualHtml)->download('navod-na-pouzitie.pdf');
+})->name('download.manual.pdf');
+
 Route::get('/localization/{locale}', LocalizationController::class)->name('localization');
 Route::middleware(Localization::class)->group(function () {
     Route::get('/remove_page', [UploadPdfController::class, 'showRemovePageForm']);

@@ -25,9 +25,12 @@
                     <x-nav-link :href="route('api.test')" :active="request()->routeIs('api.test')">
                         {{ __('API Test') }}
                     </x-nav-link>
-                    <x-nav-link href="https://node40.webte.fei.stuba.sk/api/documentation" :active="false">
-    {{ __('Documentation') }}
-</x-nav-link>
+                    <x-nav-link href="https://node44.webte.fei.stuba.sk/api/documentation" :active="false">
+                        {{ __('Documentation') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('navod')" :active="request()->routeIs('navod')" class="font-bold text-red-600 hover:text-red-700">
+                        {{ __('🛈 Návod') }}
+                    </x-nav-link>
 
                 </div>
             </div>
@@ -109,6 +112,10 @@
             <!-- Pridaný odkaz na API Test v responzívnej navigácii -->
             <x-responsive-nav-link :href="route('api.test')" :active="request()->routeIs('api.test')">
                 {{ __('API Test') }}
+            </x-responsive-nav-link>
+            <!-- Pridaný odkaz na pre navod v responzívnej navigácii -->
+            <x-responsive-nav-link :href="route('navod')" :active="request()->routeIs('navod')" class="text-red-600 font-bold">
+                {{ __('🛈 Návod') }}
             </x-responsive-nav-link>
         </div>
 
