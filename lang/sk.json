@@ -86,8 +86,32 @@
     "Extract Text": "Extrahovať text",
     "Convert PDF to Images": "PDF do obrázkov",
     "Create token": "Vytvoriť token",
-    "Your tokens": "Tvoje tokeny"
-
-
-
+    "Your tokens": "Tvoje tokeny",
+    "Zlúčiť dve PDF do jedného": "Zlúčiť dve PDF do jedného",
+    "Prvý PDF súbor:": "Prvý PDF súbor:",
+    "Druhý PDF súbor:": "Druhý PDF súbor:",
+    "Zlúčiť PDF": "Zlúčiť PDF",
+    "Nahraj obrázky": "Nahraj obrázky",
+    "Vytvoriť PDF": "Vytvoriť PDF",
+    "Odstránenie strany z PDF": "Odstránenie strany z PDF",
+    "Vyber PDF súbor:": "Vyber PDF súbor:",
+    "Číslo strany (0 = prvá):" : "Číslo strany (0 = prvá):",
+    "Odstrániť stránku": "Odstrániť stránku",
+    "Zabezpečiť PDF heslom": "Zabezpečiť PDF heslom",
+    "Heslo:": "Heslo:",
+    "Zabezpečiť PDF": "Zabezpečiť PDF",
+    "Konverzia PDF do Wordu": "Konverzia PDF do Wordu",
+    "Konvertovať na Word": "Konvertovať na Word",
+    "Konverzia PDF do PowerPointu": "Konverzia PDF do PowerPointu",
+    "Konvertovať na PowerPoint": "Konvertovať na PowerPoint",
+    "Rozdeliť PDF na dve časti": "Rozdeliť PDF na dve časti",
+    "Rozdeliť po strane číslo:": "Rozdeliť po strane číslo:",
+    "Rozdeliť PDF": "Rozdeliť PDF",
+    "Extrahovať konkrétnu stranu z PDF": "Extrahovať konkrétnu stranu z PDF",
+    "Číslo strany na extrakciu:": "Číslo strany na extrakciu:",
+    "Extrahovať stranu": "Extrahovať stranu",
+    "Extrahovať text z PDF": "Extrahovať text z PDF",
+    "Extrahovať text": "Extrahovať text",
+    "Konverzia PDF na obrázky": "Konverzia PDF na obrázky",
+    "Konvertovať na obrázky": "Konvertovať na obrázky"
 }

@@ -89,7 +89,7 @@ class UploadPdfController extends Controller
             $pdf2->move($uploadDir, basename($inputPath2));
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/merge_pdf.py'),
                 $inputPath1,
                 $inputPath2,
@@ -165,7 +165,7 @@ class UploadPdfController extends Controller
 
             // Spustenie skriptu
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/remove_page.py'),
                 $inputPath,
                 $request->input('page'),
@@ -223,7 +223,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/protect_pdf.py'),
                 $inputPath,
                 $outputPdf,
@@ -289,7 +289,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/pdf_to_word.py'),
                 $inputPath,
                 $outputDocx
@@ -354,7 +354,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/pdf_to_pptx.py'),
                 $inputPath,
                 $outputPptx,
@@ -421,7 +421,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/split_pdf.py'),
                 $inputPath,
                 $request->input('split_at'),
@@ -498,7 +498,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/extract_text_from_pdf.py'),
                 $inputPath,
                 $outputText
@@ -563,7 +563,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/pdf_to_images.py'),
                 $inputPath,
                 $imageDir
@@ -639,7 +639,7 @@ class UploadPdfController extends Controller
             $pdf->move($uploadDir, $originalName);
 
             $process = new \Symfony\Component\Process\Process([
-                '/var/www/novy/venv/bin/python3',
+                '/var/www/skuskove2/venv/bin/python3',
                 base_path('scripts/extract_page.py'),
                 $inputPath,
                 $request->input('page_number'),

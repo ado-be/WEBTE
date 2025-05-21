@@ -1,16 +1,16 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-6 bg-white rounded shadow">
-        <h2 class="text-xl font-semibold mb-4">Images to PDF</h2>
+        <h2 class="text-xl font-semibold mb-4">{{ __('Images to PDF') }}</h2>
 
         <form id="uploadForm" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
-                <label class="block font-medium">Nahraj obrázky</label>
+                <label class="block font-medium">{{ __('Nahraj obrázky') }}</label>
                 <input type="file" name="images[]" id="images" multiple accept="image/*" class="w-full border rounded px-3 py-2" required>
             </div>
 
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Vytvoriť PDF
+                {{ __('Vytvoriť PDF') }}
             </button>
         </form>
 

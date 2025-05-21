@@ -13,7 +13,7 @@
 
             {{-- Uvítacia správa --}}
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900 dark:text-gray-100 mb-10">
                     {{ __("You're logged in!") }}
                 </div>
             </div>
@@ -21,7 +21,7 @@
             {{-- Admin sekcia - zobraz len ak je používateľ admin --}}
             @if(Auth::check() && Auth::user()->is_admin)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 mb-10">
 
                         <h3 class="text-lg font-bold mb-4">🛠 {{ __('Admin Tools') }}</h3>
                         <ul class="list-disc ml-6 space-y-2">
@@ -55,69 +55,67 @@
                     </div>
                 </div>
             @endif
-
+            <div class="h-10"></div>
         </div>
-        <div class="mt-6">
-            <a href="{{ url('/images-to-pdf') }}">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Images to PDF') }}
-                </button>
-            </a>
+        <div class="w-full mt-12 flex flex-col items-center">
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="{{ url('/images-to-pdf') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Images to PDF') }}
+                    </button>
+                </a>
+                <a href="{{ url('/merge_pdfs') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Merge PDF') }}
+                    </button>
+                </a>
+                <a href="{{ url('/remove_page') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Remove Page') }}
+                    </button>
+                </a>
+                <a href="{{ url('/protect_pdf') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Protect PDF') }}
+                    </button>
+                </a>
+                <a href="{{ url('/pdf_to_word') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Convert to WORD') }}
+                    </button>
+                </a>
+            </div>
 
-            <a href="{{ url('/merge_pdfs') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Merge PDF') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/remove_page') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Remove Page') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/protect_pdf') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Protect PDF') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/pdf_to_word') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Convert to WORD') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/pdf_to_pptx') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Convert to PowerPoint') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/split_pdf') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Split PDF') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/extract_page') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Extract Page') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/extract_text') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Extract Text') }}
-                </button>
-            </a>
-
-            <a href="{{ url('/pdf_to_images') }}" class="ml-4">
-                <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
-                    {{ __('Convert PDF to Images') }}
-                </button>
-            </a>
+            <div class="flex flex-wrap justify-center gap-4 mt-4">
+                <a href="{{ url('/pdf_to_pptx') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Convert to PowerPoint') }}
+                    </button>
+                </a>
+                <a href="{{ url('/split_pdf') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Split PDF') }}
+                    </button>
+                </a>
+                <a href="{{ url('/extract_page') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Extract Page') }}
+                    </button>
+                </a>
+                <a href="{{ url('/extract_text') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Extract Text') }}
+                    </button>
+                </a>
+                <a href="{{ url('/pdf_to_images') }}">
+                    <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">
+                        {{ __('Convert PDF to Images') }}
+                    </button>
+                </a>
+            </div>
         </div>
+
+
 
         {{--        <div class="mt-6">--}}
 {{--            <a href="{{ url('/images-to-pdf') }}">--}}
