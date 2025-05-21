@@ -8,7 +8,29 @@ use Illuminate\Http\Request;
 
 class ScriptController extends Controller
 {
-
+/**
+ * @OA\Post(
+ *     path="/api/images-to-pdf",
+ *     summary="Konvertuje obrázky na PDF",
+ *     tags={"Konverzie"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"image_folder"},
+ *             @OA\Property(property="image_folder", type="string", example="storage/obrazky"),
+ *             @OA\Property(property="output_pdf", type="string", example="storage/vystup.pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF bolo úspešne vytvorené"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
     public function imagesToPdf(Request $request)
 {
     $request->validate([
@@ -47,7 +69,30 @@ class ScriptController extends Controller
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/extract-page",
+ *     summary="Extrahuje jednu stranu z PDF",
+ *     tags={"Manipulácia s PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path", "page_number"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="page_number", type="integer", example=2),
+ *             @OA\Property(property="output_path", type="string", example="storage/extracted_page.pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Strana bola úspešne extrahovaná"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
 public function extractPage(Request $request)
 {
     $request->validate([
@@ -82,7 +127,29 @@ public function extractPage(Request $request)
         'output' => $outputLog,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/extract-text",
+ *     summary="Extrahuje text z PDF",
+ *     tags={"Manipulácia s PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/suhlas.pdf"),
+ *             @OA\Property(property="output_path", type="string", example="storage/text.txt")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Text bol úspešne extrahovaný"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
 public function extractText(Request $request)
 {
     $request->validate([
@@ -115,7 +182,30 @@ public function extractText(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/merge-pdfs",
+ *     summary="Zlúči dve PDF do jedného",
+ *     tags={"Manipulácia s PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf1_path", "pdf2_path"},
+ *             @OA\Property(property="pdf1_path", type="string", example="storage/cast1.pdf"),
+ *             @OA\Property(property="pdf2_path", type="string", example="storage/cast2.pdf"),
+ *             @OA\Property(property="output_path", type="string", example="storage/zlucene.pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF boli úspešne zlúčené"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
 public function mergePdfs(Request $request)
 {
     $request->validate([
@@ -151,7 +241,29 @@ public function mergePdfs(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-images",
+ *     summary="Konvertuje PDF na obrázky (PNG)",
+ *     tags={"Konverzie"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="output_folder", type="string", example="storage/obrazky_z_pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF bol úspešne konvertovaný na obrázky"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
 public function pdfToImages(Request $request)
 {
     $request->validate([
@@ -185,7 +297,29 @@ public function pdfToImages(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-pptx",
+ *     summary="Konvertuje PDF na PowerPoint (PPTX)",
+ *     tags={"Konverzie"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="output_path", type="string", example="storage/vystup.pptx")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF bol úspešne konvertovaný na PowerPoint"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Konverzia zlyhala"
+ *     )
+ * )
+ */
 public function pdfToPptx(Request $request)
 {
     $request->validate([
@@ -220,7 +354,29 @@ public function pdfToPptx(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-word",
+ *     summary="Konvertuje PDF na Word (DOCX)",
+ *     tags={"Konverzie"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/suhlas.pdf"),
+ *             @OA\Property(property="output_path", type="string", example="storage/vystup.docx")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Úspešná konverzia"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Chyba pri konverzii"
+ *     )
+ * )
+ */
 public function pdfToWord(Request $request)
 {
     $request->validate([
@@ -256,7 +412,30 @@ public function pdfToWord(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/protect-pdf",
+ *     summary="Zabezpečí PDF heslom",
+ *     tags={"Zabezpečenie"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path", "output_path", "password"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="output_path", type="string", example="storage/zabezpeceny.pdf"),
+ *             @OA\Property(property="password", type="string", example="tajneheslo")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF bol úspešne zabezpečený"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Zabezpečenie zlyhalo"
+ *     )
+ * )
+ */
 public function protectPdf(Request $request)
 {
     $request->validate([
@@ -292,7 +471,30 @@ public function protectPdf(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/remove-page",
+ *     summary="Odstráni jednu stránku z PDF",
+ *     tags={"Manipulácia s PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path", "page_index"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="page_index", type="integer", example=1),
+ *             @OA\Property(property="output_path", type="string", example="storage/bez_strany.pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Strana bola úspešne odstránená"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Skript zlyhal"
+ *     )
+ * )
+ */
 public function removePage(Request $request)
 {
     $request->validate([
@@ -330,7 +532,31 @@ public function removePage(Request $request)
         'output' => $execOutput,
     ]);
 }
-
+/**
+ * @OA\Post(
+ *     path="/api/split-pdf",
+ *     summary="Rozdelí PDF na dve časti podľa zvolenej strany",
+ *     tags={"Manipulácia s PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"pdf_path", "split_at"},
+ *             @OA\Property(property="pdf_path", type="string", example="storage/testPDF.pdf"),
+ *             @OA\Property(property="split_at", type="integer", example=1),
+ *             @OA\Property(property="output1", type="string", example="storage/cast1.pdf"),
+ *             @OA\Property(property="output2", type="string", example="storage/cast2.pdf")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="PDF bol úspešne rozdelený"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Rozdelenie zlyhalo"
+ *     )
+ * )
+ */
 public function splitPdf(Request $request)
 {
     $request->validate([

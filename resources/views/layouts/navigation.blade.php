@@ -25,6 +25,10 @@
                     <x-nav-link :href="route('api.test')" :active="request()->routeIs('api.test')">
                         {{ __('API Test') }}
                     </x-nav-link>
+                    <x-nav-link href="https://node40.webte.fei.stuba.sk/api/documentation" :active="false">
+    {{ __('Documentation') }}
+</x-nav-link>
+
                 </div>
             </div>
 

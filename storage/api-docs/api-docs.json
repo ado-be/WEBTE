@@ -1,0 +1,454 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "PDF Toolkit API",
+        "description": "API pre manipuláciu s PDF – konverzie, extrakcie, zabezpečenie a ďalšie skripty.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/images-to-pdf": {
+            "post": {
+                "tags": [
+                    "Konverzie"
+                ],
+                "summary": "Konvertuje obrázky na PDF",
+                "operationId": "ef38e1f1497b948f69295d9d2773d46c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "image_folder"
+                                ],
+                                "properties": {
+                                    "image_folder": {
+                                        "type": "string",
+                                        "example": "storage/obrazky"
+                                    },
+                                    "output_pdf": {
+                                        "type": "string",
+                                        "example": "storage/vystup.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bolo úspešne vytvorené"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/extract-page": {
+            "post": {
+                "tags": [
+                    "Manipulácia s PDF"
+                ],
+                "summary": "Extrahuje jednu stranu z PDF",
+                "operationId": "8e8b4a607a02dbb3937bcfd43f32a03d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path",
+                                    "page_number"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "page_number": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/extracted_page.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Strana bola úspešne extrahovaná"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/extract-text": {
+            "post": {
+                "tags": [
+                    "Manipulácia s PDF"
+                ],
+                "summary": "Extrahuje text z PDF",
+                "operationId": "22a0bc79c97ae0d830c8e0be9ee72dc9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/suhlas.pdf"
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/text.txt"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Text bol úspešne extrahovaný"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/merge-pdfs": {
+            "post": {
+                "tags": [
+                    "Manipulácia s PDF"
+                ],
+                "summary": "Zlúči dve PDF do jedného",
+                "operationId": "909e3dc0026fefaad5e6d4d6a2c5d78f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf1_path",
+                                    "pdf2_path"
+                                ],
+                                "properties": {
+                                    "pdf1_path": {
+                                        "type": "string",
+                                        "example": "storage/cast1.pdf"
+                                    },
+                                    "pdf2_path": {
+                                        "type": "string",
+                                        "example": "storage/cast2.pdf"
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/zlucene.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF boli úspešne zlúčené"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/pdf-to-images": {
+            "post": {
+                "tags": [
+                    "Konverzie"
+                ],
+                "summary": "Konvertuje PDF na obrázky (PNG)",
+                "operationId": "2b41d6c486864dea0fb6ef4844c7914b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "output_folder": {
+                                        "type": "string",
+                                        "example": "storage/obrazky_z_pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne konvertovaný na obrázky"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/pdf-to-pptx": {
+            "post": {
+                "tags": [
+                    "Konverzie"
+                ],
+                "summary": "Konvertuje PDF na PowerPoint (PPTX)",
+                "operationId": "93534d6004e0944ead2d2e342b05304a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/vystup.pptx"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne konvertovaný na PowerPoint"
+                    },
+                    "500": {
+                        "description": "Konverzia zlyhala"
+                    }
+                }
+            }
+        },
+        "/api/pdf-to-word": {
+            "post": {
+                "tags": [
+                    "Konverzie"
+                ],
+                "summary": "Konvertuje PDF na Word (DOCX)",
+                "operationId": "796d6d012cd168d2e4e26b0a710e1465",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/suhlas.pdf"
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/vystup.docx"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Úspešná konverzia"
+                    },
+                    "500": {
+                        "description": "Chyba pri konverzii"
+                    }
+                }
+            }
+        },
+        "/api/protect-pdf": {
+            "post": {
+                "tags": [
+                    "Zabezpečenie"
+                ],
+                "summary": "Zabezpečí PDF heslom",
+                "operationId": "56592639b74be1256818058af00bbc85",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path",
+                                    "output_path",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/zabezpeceny.pdf"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "tajneheslo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne zabezpečený"
+                    },
+                    "500": {
+                        "description": "Zabezpečenie zlyhalo"
+                    }
+                }
+            }
+        },
+        "/api/remove-page": {
+            "post": {
+                "tags": [
+                    "Manipulácia s PDF"
+                ],
+                "summary": "Odstráni jednu stránku z PDF",
+                "operationId": "b589c092c09861cfc414a6f337c81ac0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path",
+                                    "page_index"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "page_index": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "output_path": {
+                                        "type": "string",
+                                        "example": "storage/bez_strany.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Strana bola úspešne odstránená"
+                    },
+                    "500": {
+                        "description": "Skript zlyhal"
+                    }
+                }
+            }
+        },
+        "/api/split-pdf": {
+            "post": {
+                "tags": [
+                    "Manipulácia s PDF"
+                ],
+                "summary": "Rozdelí PDF na dve časti podľa zvolenej strany",
+                "operationId": "762bb7db3c7c224ed347b1c28bfe0b91",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pdf_path",
+                                    "split_at"
+                                ],
+                                "properties": {
+                                    "pdf_path": {
+                                        "type": "string",
+                                        "example": "storage/testPDF.pdf"
+                                    },
+                                    "split_at": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "output1": {
+                                        "type": "string",
+                                        "example": "storage/cast1.pdf"
+                                    },
+                                    "output2": {
+                                        "type": "string",
+                                        "example": "storage/cast2.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne rozdelený"
+                    },
+                    "500": {
+                        "description": "Rozdelenie zlyhalo"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Konverzie",
+            "description": "Konverzie"
+        },
+        {
+            "name": "Manipulácia s PDF",
+            "description": "Manipulácia s PDF"
+        },
+        {
+            "name": "Zabezpečenie",
+            "description": "Zabezpečenie"
+        }
+    ]
+}

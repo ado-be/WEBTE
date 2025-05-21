@@ -97,3 +97,7 @@ Route::middleware(Localization::class)->group(function () {
 
     require __DIR__ . '/auth.php';
 });
+//deokumentacia APi, swagger
+Route::get('/api/documentation', function () {
+    return view('l5-swagger::index');
+});

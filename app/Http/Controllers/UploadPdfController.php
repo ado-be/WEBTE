@@ -6,9 +6,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
-
+/**
+ * Class UploadPdfController
+ *
+ * Controller na spracovanie PDF súborov pomocou externých Python skriptov.
+ * Obsahuje funkcie ako zlučovanie, extrakcia strán, konverzia, ochrana heslom, atď.
+ *
+ * @package App\Http\Controllers
+ */
 class UploadPdfController extends Controller
 {
+   /**
+ * @OA\Post(
+ *     path="/api/images-to-pdf2",
+ *     summary="Vytvorenie PDF z obrázkov",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="images[]",
+ *                     type="array",
+ *                     @OA\Items(type="string", format="binary"),
+ *                     description="Obrázky na vloženie do PDF"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Úspešne vygenerovaný PDF súbor"),
+ *     @OA\Response(response=500, description="Chyba pri generovaní PDF")
+ * )
+ */
     public function generateFromImages(Request $request)
     {
         try {
@@ -59,7 +89,25 @@ class UploadPdfController extends Controller
             return response('Interná chyba servera.', 500);
         }
     }
-
+/**
+ * @OA\Post(
+ *     path="/api/merge-pdf",
+ *     summary="Zlúčenie dvoch PDF súborov",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file1", type="string", format="binary", description="Prvý PDF súbor"),
+ *                 @OA\Property(property="pdf_file2", type="string", format="binary", description="Druhý PDF súbor")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Zlúčený PDF súbor"),
+ *     @OA\Response(response=500, description="Chyba pri zlučovaní PDF")
+ * )
+ */
     public function mergePdfs(Request $request)
     {
         try {
@@ -125,19 +173,46 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár pre zlúčenie PDF súborov.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showMergePdfsForm()
     {
         return view('merge_pdfs');
     }
 
-
+/**
+ * Zobrazí formulár na odstránenie stránky z PDF.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showRemovePageForm()
     {
         return view('remove_page');
     }
 
 
-
+/**
+ * @OA\Post(
+ *     path="/api/remove-page2",
+ *     summary="Odstránenie strany z PDF",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF súbor"),
+ *                 @OA\Property(property="page", type="integer", description="Index strany na odstránenie (od 0)")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Upravený PDF bez danej strany"),
+ *     @OA\Response(response=500, description="Chyba pri spracovaní PDF")
+ * )
+ */
     public function removePage(Request $request)
     {
         try {
@@ -197,7 +272,25 @@ class UploadPdfController extends Controller
         }
     }
 
-
+/**
+ * @OA\Post(
+ *     path="/api/protect-pdf2",
+ *     summary="Ochrana PDF heslom",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF súbor"),
+ *                 @OA\Property(property="password", type="string", description="Heslo")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Zašifrovaný PDF"),
+ *     @OA\Response(response=500, description="Chyba pri šifrovaní PDF")
+ * )
+ */
     public function protectPdf(Request $request)
     {
         try {
@@ -259,12 +352,33 @@ class UploadPdfController extends Controller
             return back();
         }
     }
-
+/**
+ * Zobrazí formulár na zabezpečenie PDF heslom.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showProtectPdfForm()
     {
         return view('protect_pdf');
     }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-word2",
+ *     summary="Konverzia PDF na Word",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF dokument")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="DOCX dokument"),
+ *     @OA\Response(response=500, description="Chyba pri konverzii PDF na Word")
+ * )
+ */
     public function pdfToWord(Request $request)
     {
         try {
@@ -324,11 +438,33 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na konverziu PDF na Word.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showPdfToWordForm()
     {
         return view('pdf_to_word');
     }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-pptx2",
+ *     summary="Konverzia PDF na PowerPoint",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF dokument")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="PowerPoint prezentácia"),
+ *     @OA\Response(response=500, description="Chyba pri konverzii PDF na PPTX")
+ * )
+ */
     public function pdfToPptx(Request $request)
     {
         try {
@@ -390,11 +526,34 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na konverziu PDF na PPTX.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showPdfToPptxForm()
     {
         return view('pdf_to_pptx');
     }
-
+/**
+ * @OA\Post(
+ *     path="/api/split-pdf2",
+ *     summary="Rozdelenie PDF dokumentu",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF súbor"),
+ *                 @OA\Property(property="split_at", type="integer", description="Strana, kde rozdeliť PDF (od 1)")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="ZIP archív s dvoma PDF časťami"),
+ *     @OA\Response(response=500, description="Chyba pri rozdelení PDF")
+ * )
+ */
     public function splitPdf(Request $request)
     {
         try {
@@ -470,10 +629,33 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na rozdelenie PDF.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showSplitPdfForm()
     {
         return view('split_pdf');
     }
+  /**
+ * @OA\Post(
+ *     path="/api/extract-text2",
+ *     summary="Extrakcia textu z PDF",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF súbor")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Textový súbor s extrahovaným obsahom"),
+ *     @OA\Response(response=500, description="Chyba pri extrakcii textu")
+ * )
+ */
     public function extractTextFromPdf(Request $request)
     {
         try {
@@ -533,11 +715,33 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na extrakciu textu z PDF.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showExtractTextForm()
     {
         return view('extract_text');
     }
-
+/**
+ * @OA\Post(
+ *     path="/api/pdf-to-images2",
+ *     summary="Konverzia PDF na obrázky",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF dokument")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="ZIP archív s obrázkami"),
+ *     @OA\Response(response=500, description="Chyba pri konverzii PDF na obrázky")
+ * )
+ */
     public function pdfToImages(Request $request)
     {
         try {
@@ -610,10 +814,34 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na konverziu PDF na obrázky.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showPdfToImagesForm()
     {
         return view('pdf_to_images');
     }
+/**
+ * @OA\Post(
+ *     path="/api/extract-page2",
+ *     summary="Extrahovanie jednej strany z PDF",
+ *     tags={"PDF"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="pdf_file", type="string", format="binary", description="PDF súbor"),
+ *                 @OA\Property(property="page_number", type="integer", description="Číslo strany (od 1)")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="PDF so zvolenou stranou"),
+ *     @OA\Response(response=500, description="Chyba pri extrahovaní strany")
+ * )
+ */
     public function extractPage(Request $request)
     {
         try {
@@ -675,6 +903,11 @@ class UploadPdfController extends Controller
             return back();
         }
     }
+    /**
+ * Zobrazí formulár na extrakciu jednej strany z PDF.
+ *
+ * @return \Illuminate\View\View
+ */
     public function showExtractPageForm()
     {
         return view('extract_page');
